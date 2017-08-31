@@ -1,6 +1,9 @@
 #!usr/bin/env python
 
-''' Python program to check for news & updates on school website '''
+''' Python program to check for news & updates on school website
+    The current ID in the txt file is to be updated manually at the end of every year, setting it to the ID
+    of the first news that has come out.
+'''
 
 import urllib.request as request
 from bs4 import BeautifulSoup
@@ -8,15 +11,15 @@ import os
 
 __author__ = "Tobia Valerio"
 __license__ = "GPL"
-__version__ = "0.1a"
-__status__ = "Development"
+__version__ = "V1.0"
+__status__ = "Production"
 
-def getPageContent(): #Get Updated Circ ID From Site
+def getPageContent(): #Get Updated news ID From school website
     page = request.urlopen("https://www.marconiverona.gov.it/portal/circolari").read()
     soup = BeautifulSoup(page, "html.parser")
     new_ID = soup.find("td", {"class":"db_app_circolari___numero fabrik_element fabrik_list_101_group_123 integer"}).text.strip()
 
-    print("Connessione al webserver stabilita e pagina scaricata.\n")
+    print("Connessione al webserver stabilita e dati scaricati.\n")
 
     return new_ID
 
@@ -24,13 +27,12 @@ def logAndCheckNewID(current_ID): #Check logs for past IDs and compare them with
     if os.stat("lc_log.txt").st_size == 0:
         with open("lc_log.txt", "r+") as f:
             f.write(current_ID)
-        print("Log circolari aggiornato.")
-        
+        print("Log circolari aggiornato.")   
     else:
         with open("lc_log.txt", "r") as f:
             past_ID = f.read()
 
-        if past_ID < current_ID:
+        if past_ID < current_ID: #If the past ID is lesser than the new ID, there are new news
             print("Nuova Circolare!")
             updateLog(current_ID)
             return current_ID
