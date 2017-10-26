@@ -14,45 +14,42 @@ __license__ = "GPL"
 __version__ = "V1.0"
 __status__ = "Production"
 
-def getPageContent(): #Get Updated news ID From school website
+def get_page_content(): #Get Updated news ID From school website
     page = request.urlopen("https://www.marconiverona.gov.it/portal/circolari").read()
     soup = BeautifulSoup(page, "html.parser")
-    new_ID = soup.find("td", {"class":"db_app_circolari___numero fabrik_element fabrik_list_101_group_123 integer"}).text.strip()
+    new_id = soup.find("td", {"class":"db_app_circolari___numero fabrik_element fabrik_list_101_group_123 integer"}).text.strip()
 
     print("Connessione al webserver stabilita e dati scaricati.\n")
 
-    return new_ID
+    return new_id
 
-def logAndCheckNewID(current_ID): #Check logs for past IDs and compare them with the (eventual) new ID
+def log_and_check_new_id(current_id): #Check logs for past IDs and compare them with the (eventual) new ID
     if os.stat("lc_log.txt").st_size == 0:
         with open("lc_log.txt", "r+") as f:
-            f.write(current_ID)
+            f.write(current_id)
         print("Log circolari aggiornato.")   
     else:
         with open("lc_log.txt", "r") as f:
-            past_ID = f.read()
+            past_id = f.read()
 
-        if past_ID < current_ID: #If the past ID is lesser than the new ID, there are new news
+        if past_id < current_id: #If the past ID is lesser than the new ID, there are new news
             print("Nuova Circolare!")
-            updateLog(current_ID)
-            return current_ID
+            update_log(current_id)
+            return current_id
         else:
             print("Niente di nuovo.")
             return 0
 
-def updateLog(current_ID):
+def update_log(current_id):
     with open("lc_log.txt", "w") as f:
-        f.write(current_ID)
+        f.write(current_id)
     
 def main():
-    actual_ID = getPageContent()
-    news_or_not = logAndCheckNewID(actual_ID)
-    if news_or_not != 0:
-        if input("\nUscire dal programma? "):
-            exit()
-    else:
-        if input("\nUscire dal programma? "):
-            exit()
+    actual_id = get_page_content()
+    news_or_not = log_and_check_new_id(actual_id)
+    
+    if input("\nUscire dal programma? "):
+        exit()
         
 if __name__ == "__main__":
     main()
