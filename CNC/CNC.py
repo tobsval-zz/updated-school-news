@@ -19,7 +19,7 @@ def get_page_content(): #Get Updated news ID From school website
     soup = BeautifulSoup(page, "html.parser")
     new_id = soup.find("td", {"class":"db_app_circolari___numero fabrik_element fabrik_list_101_group_123 integer"}).text.strip()
 
-    print("Connessione al webserver stabilita e dati scaricati.\n")
+    print("Richiesta al webserver eseguita con successo\n")
 
     return new_id
 
