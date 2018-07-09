@@ -12,7 +12,7 @@ import os
 __author__ = "Tobia Valerio"
 __license__ = "GPL"
 __version__ = "V1.0"
-__status__ = "Production"
+__status__ = "To Be Refactored"
 
 def get_page_content(): #Get Updated news ID From school website
     page = request.urlopen("https://www.marconiverona.gov.it/portal/circolari").read()
